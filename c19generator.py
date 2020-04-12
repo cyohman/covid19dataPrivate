@@ -5,13 +5,15 @@ import pandas as pd
 #use filename provided by command- line
 
 c19_df =  pd.read_csv(sys.argv[1], sep=',')
-print(c19_df.columns)
+#print(c19_df.columns)
 
 uniqueStates = c19_df.state.unique()
-print(uniqueStates)
+for state in uniqueStates:
+	state_df=c19_df[c19_df['state']==state]
+	print(state_df)
 
-vt_df  = c19_df[c19_df['state']=='Vermont']
-print(vt_df)
+#vt_df  = c19_df[c19_df['state']=='Vermont']
+#print(vt_df)
 
 #for row in covid19reader:
 #   print(', '.join(row))
