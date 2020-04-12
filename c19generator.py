@@ -7,6 +7,9 @@ import pandas as pd
 c19_df =  pd.read_csv(sys.argv[1], sep=',')
 print(c19_df.columns)
 
+uniqueStates = c19_df.state.unique()
+print(uniqueStates)
+
 vt_df  = c19_df[c19_df['state']=='Vermont']
 print(vt_df)
 
