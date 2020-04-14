@@ -13,6 +13,7 @@ for state in uniqueStates:
 	state_df=c19_df[c19_df['state']==state]
 	#print(state_df)
 	state_df.plot(kind='scatter',x='date',y='cases',color='red')
+	plt.gcf().autofmt_xdate()
 	print('Outputting '+state+' data')
 	plt.savefig(state+'.png')
 	#plt.show()
