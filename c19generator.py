@@ -11,9 +11,11 @@ print(c19_df.columns)
 uniqueStates = c19_df.state.unique()
 for state in uniqueStates:
 	state_df=c19_df[c19_df['state']==state]
-	print(state_df)
+	#print(state_df)
 	state_df.plot(kind='scatter',x='date',y='cases',color='red')
-	plt.show()
+	print('Outputting '+state+' data')
+	plt.savefig(state+'.png')
+	#plt.show()
 
 #vt_df  = c19_df[c19_df['state']=='Vermont']
 #print(vt_df)
