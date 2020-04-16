@@ -14,6 +14,9 @@ for state in uniqueStates:
 	#print(state_df)
 	state_df.plot(kind='scatter',x='date',y='cases',color='red')
 	plt.gcf().autofmt_xdate()
+	ax = plt.axes()
+	ax.xaxis.set_major_locator(plt.MaxNLocator(3))
+	
 	print('Outputting '+state+' data')
 	plt.savefig(state+'.png')
 	#plt.show()
