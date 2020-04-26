@@ -27,6 +27,8 @@ for state in uniqueStates:
 	
 	print('Outputting '+state+' data')
 	plt.savefig(savePath+state+'.png')
+	#2020.04.26, chance.yohman@gmail.com, Fix the 20 plots warning
+	plt.close()
 
 #vt_df  = c19_df[c19_df['state']=='Vermont']
 #print(vt_df)
