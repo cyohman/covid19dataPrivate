@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 from datetime import date
+from lmfit.models import LognormalModel
 
 #2020.04.11 cey
 #use filename provided by command- line
@@ -24,7 +25,12 @@ for state in uniqueStates:
 	plt.gcf().autofmt_xdate()
 	ax = plt.axes()
 	ax.xaxis.set_major_locator(plt.MaxNLocator(20))
-	
+
+	model = LognormalModel()
+	params = model.guess(state_df['cases'], x=state_df['date'])
+	result = model.fit(state_df['cases'], params, x=state_df['date'])   
+	result.plot_fit()
+
 	print('Outputting '+state+' data')
 	plt.savefig(savePath+state+'.png')
 	#2020.04.26, chance.yohman@gmail.com, Fix the 20 plots warning
