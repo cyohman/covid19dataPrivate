@@ -9,10 +9,15 @@ import scipy as sp
 from scipy.optimize import curve_fit
 
 #2020.04.30, cey, Need to figure out the right curve to fit here
-def func(x, a, b, c ):
-    #return a * np.exp(-b * x) + c
-    return a / (1+ np.exp(-b*(x-c)))
-    #return a + b*np.log(x)
+#def func(x, a, b, c ):
+#    #return a * np.exp(-b * x) + c
+#    #return a / (1+ np.exp(-b*(x-c)))
+#    return 1 / (1+ np.exp(-x))
+#    #return a + b*np.log(x)
+def sigmoid(x, L ,x0, k, b):
+    y = L / (1 + np.exp(-k*(x-x0)))+b
+    return (y)
+
 
 #2020.04.11, cey
 #use filename provided by command- line and values in those files are assumed to be separated by a comma
@@ -32,6 +37,7 @@ print ("The save directory is %s" % savePath)
 uniqueStates = c19_df.state.unique()
 
 for state in uniqueStates:
+	print("Processing "+state+" data")
 	state_df=c19_df[c19_df['state']==state]
 	
 	numDays = len(state_df['date'])
@@ -40,11 +46,18 @@ for state in uniqueStates:
 
 	y= state_df['cases']
 
+	p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
+	print(p0)
+
 	#2020.04.30, cey, Need to figure out what popt and pcov are
-	popt, pcov = curve_fit(func, xData, y)	
+	#popt, pcov = curve_fit(func, xData, y)	
+	popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=9999)
+	print(popt)
+	print(pcov)
+	yData = sigmoid(xData, *popt)
 
 	plt.plot(xData, y, 'ko', label="Original Case Data")	
-	plt.plot(xData, func(xData, *popt), 'r-', label="Fitted Curve")
+	plt.plot(xData, yData, 'r-', label="Fitted Curve")
 
 	print('Outputting '+state+' data')
 	plt.savefig(savePath+state+'.png')
