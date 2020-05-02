@@ -9,8 +9,10 @@ import scipy as sp
 from scipy.optimize import curve_fit
 
 #2020.04.30, cey, Need to figure out the right curve to fit here
-def func(x, a, b ):
-    return a + b*np.log(x)
+def func(x, a, b, c ):
+    #return a * np.exp(-b * x) + c
+    return a / (1+ np.exp(-b*(x-c)))
+    #return a + b*np.log(x)
 
 #2020.04.11, cey
 #use filename provided by command- line and values in those files are assumed to be separated by a comma
