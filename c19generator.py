@@ -1,5 +1,7 @@
 import sys
 import pandas as pd
+import matplotlib
+matplotlib.rcParams['text.usetex'] = True
 import matplotlib.pyplot as plt
 import os
 from datetime import date
@@ -55,8 +57,13 @@ for state in uniqueStates:
 
 	plt.plot(xData, y, 'ko', label="Original Case Data")	
 	plt.plot(xData, yData, 'r-', label="Fitted Curve")
+ 	
+	ax = plt.axes()
+	ax.set_title(r'\TeX\ is Number $\displaystyle\sum_{n=1}^\infty'
+             r'\frac{-e^{i\pi}}{2^n}$!', fontsize=16, color='r')
 
 	#print('Outputting '+state+' data')
+	
 	plt.savefig(savePath+state+'.png')
 	
 	#2020.04.26, chance.yohman@gmail.com, Fix the 20 plots warning
