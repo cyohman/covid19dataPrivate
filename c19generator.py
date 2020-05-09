@@ -11,10 +11,10 @@ from scipy.optimize import curve_fit
 
 #2020.04.30, cey, Need to figure out the right curve to fit here
 def sigmoid(x, L ,x0, k, b):
-    print("L: ", L)
-    print("x0: ", x0)
-    print("k: ", k)
-    print("b: ", b)
+#    print("L: ", L)
+#    print("x0: ", x0)
+#    print("k: ", k)
+#    print("b: ", b)
     y = L / (1 + np.exp(-k*(x-x0)))+b
     return (y)
 
@@ -51,7 +51,7 @@ for state in uniqueStates:
 
 	#2020.04.30, cey, Need to figure out what popt and pcov are
 	popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=9999)
-	#print(popt)
+	print(popt)
 	#print(pcov)
 	yData = sigmoid(xData, *popt)
 
@@ -59,9 +59,12 @@ for state in uniqueStates:
 	plt.plot(xData, yData, 'r-', label="Fitted Curve")
  	
 	ax = plt.axes()
-	ax.set_title(r'\TeX\ is Number $\displaystyle\sum_{n=1}^\infty'
-             r'\frac{-e^{i\pi}}{2^n}$!', fontsize=16, color='r')
 
+	p = 'echo'
+	print(p)
+
+	ax.set_title(r'$\displaystyle\\'
+             r'\frac{L}{1+e^(-k*(x-x0))}+b$', fontsize=16, color='r')
 	#print('Outputting '+state+' data')
 	
 	plt.savefig(savePath+state+'.png')
