@@ -42,30 +42,24 @@ for state in uniqueStates:
 	
 	numDays = len(state_df['date'])
 	xData = np.linspace(1, numDays, numDays, dtype=int) 
-	#print(xData)
 
 	y= state_df['cases']
 
 	p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
-	#print(p0)
 
 	#2020.04.30, cey, Need to figure out what popt and pcov are
 	popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=9999)
-	print(popt)
-	#print(pcov)
 	yData = sigmoid(xData, *popt)
+
+	plt.yscale("log")
 
 	plt.plot(xData, y, 'ko', label="Original Case Data")	
 	plt.plot(xData, yData, 'r-', label="Fitted Curve")
  	
 	ax = plt.axes()
 
-	p = 'echo'
-	print(p)
-
 	ax.set_title(r'$\displaystyle\\'
              r'\frac{L}{1+e^(-k*(x-x0))}+b$', fontsize=16, color='r')
-	#print('Outputting '+state+' data')
 	
 	plt.savefig(savePath+state+'.png')
 	
