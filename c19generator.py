@@ -55,11 +55,10 @@ for state in uniqueStates:
 
 	plt.plot(xData, y, 'ko', label="Original Case Data")	
 	plt.plot(xData, yData, 'r-', label="Fitted Curve")
- 	
-	ax = plt.axes()
 
-	ax.set_title(r'$\displaystyle\\'
-             r'\frac{L}{1+e^(-k*(x-x0))}+b$', fontsize=16, color='r')
+	#2020.05.11, cey, Commenting this out because of 20 plots problem
+	#ax.set_title(r'$\displaystyle\\'
+        #     r'\frac{L}{1+e^(-k*(x-x0))}+b$', fontsize=16, color='r')
 	
 	plt.savefig(savePath+state+'.png')
 	
