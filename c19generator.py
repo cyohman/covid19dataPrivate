@@ -25,6 +25,10 @@ def sigmoid(x, L ,x0, k, b):
 c19_df =  pd.read_csv(sys.argv[1], sep=',')
 print(c19_df.columns)
 
+counties_in_dataframe = "counties" in c19_df
+
+print(counties_in_dataframe)
+
 path = os.getcwd()
 print ("The current working directory is %s" % path)
 
