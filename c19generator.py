@@ -22,50 +22,88 @@ def sigmoid(x, L ,x0, k, b):
 #2020.04.11, cey
 #use filename provided by command- line and values in those files are assumed to be separated by a comma
 
-c19_df =  pd.read_csv(sys.argv[1], sep=',')
-print(c19_df.columns)
+#print(states_df.columns)
 
-counties_in_dataframe = "counties" in c19_df
+#county_in_dataframe = "county" in states_df
+#print(county_in_dataframe)
 
-print(counties_in_dataframe)
+#state_in_dataframe = "state" in states_df
+#print(state_in_dataframe)
 
-path = os.getcwd()
-print ("The current working directory is %s" % path)
+workingPath = os.getcwd()
+print ("The current working directory is %s" % workingPath)
 
 #2020.04.30, cey, Add the hour, minute, and second to the folder in 24 hour time
-savePath = path+"/"+datetime.now().strftime("%m-%d-%Y_%H%M")+"/";
-os.mkdir(savePath);
-print ("The save directory is %s" % savePath)
+rootSavePath = workingPath+"/"+datetime.now().strftime("%m-%d-%Y_%H%M%S")+"/";
+os.mkdir(rootSavePath);
+
+print ("The root save path is %s" % rootSavePath)
+
+
+states_df =  pd.read_csv('us-states.csv', sep=',')
+
+counties_df = pd.read_csv('us-counties.csv', sep=',')
 
 #2020.04.30, cey, The list of unique states & territories
-uniqueStates = c19_df.state.unique()
+uniqueStates = states_df.state.unique()
 
 for state in uniqueStates:
+	
+	stateRootSavePath = rootSavePath + state + "/"
+	os.mkdir(stateRootSavePath);
+	print ("The state root save path is %s" % stateRootSavePath)
+	
+
 	print("Processing "+state+" data")
-	state_df=c19_df[c19_df['state']==state]
+	state_df=states_df[states_df['state']==state]
 	
 	numDays = len(state_df['date'])
 	xData = np.linspace(1, numDays, numDays, dtype=int) 
 
 	y= state_df['cases']
 
-	p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
+	#p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
 
 	#2020.04.30, cey, Need to figure out what popt and pcov are
-	popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=9999)
-	yData = sigmoid(xData, *popt)
+	#popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=9999)
+	#yData = sigmoid(xData, *popt)
 
 	plt.yscale("log")
 
 	plt.plot(xData, y, 'ko', label="Original Case Data")	
-	plt.plot(xData, yData, 'r-', label="Fitted Curve")
+	#plt.plot(xData, yData, 'r-', label="Fitted Curve")
 
-	#2020.05.11, cey, Commenting this out because of 20 plots problem
-	#ax.set_title(r'$\displaystyle\\'
-        #     r'\frac{L}{1+e^(-k*(x-x0))}+b$', fontsize=16, color='r')
-	
-	plt.savefig(savePath+state+'.png')
+	plt.savefig(stateRootSavePath+state+'.png')
 	
 	#2020.04.26, chance.yohman@gmail.com, Fix the 20 plots warning
 	plt.close()
 
+	state_counties_df=counties_df[counties_df['state']==state]
+	uniqueCounties = state_counties_df.county.unique()
+
+	for county in uniqueCounties:
+
+        	print("Processing "+state+" - "+county+" county data")
+        	county_df=state_counties_df[state_counties_df['county']==county]
+
+        	numDays = len(county_df['date'])
+        	xData = np.linspace(1, numDays, numDays, dtype=int)
+
+        	y= county_df['cases']
+
+        	#p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
+
+        	#2020.04.30, cey, Need to figure out what popt and pcov are
+        	#popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=99999)
+        	#yData = sigmoid(xData, *popt)
+
+        	plt.yscale("log")
+
+        	plt.plot(xData, y, 'ko', label="Original Case Data")
+        	#plt.plot(xData, yData, 'r-', label="Fitted Curve")
+
+
+        	plt.savefig(stateRootSavePath+state+'_'+county+'_county.png')
+
+        	#2020.04.26, chance.yohman@gmail.com, Fix the 20 plots warning
+        	plt.close()
