@@ -53,7 +53,6 @@ for state in uniqueStates:
 	os.mkdir(stateRootSavePath);
 	print ("The state root save path is %s" % stateRootSavePath)
 	
-
 	print("Processing "+state+" data")
 	state_df=states_df[states_df['state']==state]
 	
@@ -62,16 +61,16 @@ for state in uniqueStates:
 
 	y= state_df['cases']
 
-	#p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
+	p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
 
 	#2020.04.30, cey, Need to figure out what popt and pcov are
-	#popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=9999)
-	#yData = sigmoid(xData, *popt)
+	popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=9999)
+	yData = sigmoid(xData, *popt)
 
 	plt.yscale("log")
 
 	plt.plot(xData, y, 'ko', label="Original Case Data")	
-	#plt.plot(xData, yData, 'r-', label="Fitted Curve")
+	plt.plot(xData, yData, 'r-', label="Fitted Curve")
 
 	plt.savefig(stateRootSavePath+state+'.png')
 	
@@ -83,27 +82,27 @@ for state in uniqueStates:
 
 	for county in uniqueCounties:
 
-        	print("Processing "+state+" - "+county+" county data")
-        	county_df=state_counties_df[state_counties_df['county']==county]
+		if county != "Unknown":
+        		print("Processing "+state+" - "+county+" county data")
+        		county_df=state_counties_df[state_counties_df['county']==county]
 
-        	numDays = len(county_df['date'])
-        	xData = np.linspace(1, numDays, numDays, dtype=int)
+        		numDays = len(county_df['date'])
+        		xData = np.linspace(1, numDays, numDays, dtype=int)
 
-        	y= county_df['cases']
+        		y= county_df['cases']
 
-        	#p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
+        		#p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
 
-        	#2020.04.30, cey, Need to figure out what popt and pcov are
-        	#popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=99999)
-        	#yData = sigmoid(xData, *popt)
+        		#2020.04.30, cey, Need to figure out what popt and pcov are
+        		#popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=99999)
+        		#yData = sigmoid(xData, *popt)
 
-        	plt.yscale("log")
+        		plt.yscale("log")
 
-        	plt.plot(xData, y, 'ko', label="Original Case Data")
-        	#plt.plot(xData, yData, 'r-', label="Fitted Curve")
+        		plt.plot(xData, y, 'ko', label="Original Case Data")
+        		#plt.plot(xData, yData, 'r-', label="Fitted Curve")
 
+        		plt.savefig(stateRootSavePath+state+'_'+county+'_county.png')
 
-        	plt.savefig(stateRootSavePath+state+'_'+county+'_county.png')
-
-        	#2020.04.26, chance.yohman@gmail.com, Fix the 20 plots warning
-        	plt.close()
+        		#2020.04.26, chance.yohman@gmail.com, Fix the 20 plots warning
+        		plt.close()
