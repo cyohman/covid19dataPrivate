@@ -63,22 +63,38 @@ for state in uniqueStates:
 
 	p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
 
-	#2020.04.30, cey, Need to figure out what popt and pcov are
-	popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=9999)
+	try:
+	   popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=99999)
+	   print (popt, pcov)
+           
+	   if np.isfinite(pcov).all():
+	         print ('valid')
+	   else:
+    	         print ('invalid')
+              
+	   yData = sigmoid(xData, *popt)
+	   plt.plot(xData, yData, 'r-', label="Fitted Curve")
+	except TypeError as err:
+	   print(err)
+	except RuntimeError as err:
+	   print(err)
 	
-	print (popt, pcov)
+        #2020.04.30, cey, Need to figure out what popt and pcov are
+	#popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=9999)
 	
-	if np.isfinite(pcov).all():
-    		print ('valid')
-	else:
-    		print ('invalid')
+	#print (popt, pcov)
 	
-	yData = sigmoid(xData, *popt)
+	#if np.isfinite(pcov).all():
+    	#	print ('valid')
+	#else:
+    	#	print ('invalid')
+	
+	#yData = sigmoid(xData, *popt)
 
 	plt.yscale("log")
 
 	plt.plot(xData, y, 'ko', label="Original Case Data")	
-	plt.plot(xData, yData, 'r-', label="Fitted Curve")
+	#plt.plot(xData, yData, 'r-', label="Fitted Curve")
 
 	plt.savefig(stateRootSavePath+state+'.png')
 	
@@ -115,6 +131,8 @@ for state in uniqueStates:
         	      plt.plot(xData, yData, 'r-', label="Fitted Curve")
         	   except TypeError as err:
 	      	      print(err)
+	           except RuntimeError as err:
+	              print(err)
 
         	   plt.yscale("log")
 
