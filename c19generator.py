@@ -22,14 +22,6 @@ def sigmoid(x, L ,x0, k, b):
 #2020.04.11, cey
 #use filename provided by command- line and values in those files are assumed to be separated by a comma
 
-#print(states_df.columns)
-
-#county_in_dataframe = "county" in states_df
-#print(county_in_dataframe)
-
-#state_in_dataframe = "state" in states_df
-#print(state_in_dataframe)
-
 workingPath = os.getcwd()
 print ("The current working directory is %s" % workingPath)
 
@@ -39,6 +31,40 @@ os.mkdir(rootSavePath);
 
 print ("The root save path is %s" % rootSavePath)
 
+print("Processing US  data")
+us_df = pd.read_csv('us.csv', sep=',')
+
+numDays = len(us_df['date'])
+xData = np.linspace(1, numDays, numDays, dtype=int) 
+
+y= us_df['cases']
+
+p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
+
+try:
+	popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=99999)
+	print (popt, pcov)
+           
+	if np.isfinite(pcov).all():
+	   print ('valid')
+	else:
+	   print ('invalid')
+              
+	yData = sigmoid(xData, *popt)
+	plt.plot(xData, yData, 'r-', label="Fitted Curve")
+except TypeError as err:
+   print(err)
+except RuntimeError as err:
+   print(err)
+	
+plt.yscale("log")
+
+plt.plot(xData, y, 'ko', label="Original Case Data")	
+
+plt.savefig(rootSavePath+'US.png')
+	
+#2020.04.26, chance.yohman@gmail.com, Fix the 20 plots warning
+plt.close()
 
 states_df =  pd.read_csv('us-states.csv', sep=',')
 
@@ -79,22 +105,9 @@ for state in uniqueStates:
 	except RuntimeError as err:
 	   print(err)
 	
-        #2020.04.30, cey, Need to figure out what popt and pcov are
-	#popt, pcov = curve_fit(sigmoid, xData, y, p0,  maxfev=9999)
-	
-	#print (popt, pcov)
-	
-	#if np.isfinite(pcov).all():
-    	#	print ('valid')
-	#else:
-    	#	print ('invalid')
-	
-	#yData = sigmoid(xData, *popt)
-
 	plt.yscale("log")
 
 	plt.plot(xData, y, 'ko', label="Original Case Data")	
-	#plt.plot(xData, yData, 'r-', label="Fitted Curve")
 
 	plt.savefig(stateRootSavePath+state+'.png')
 	
