@@ -39,6 +39,8 @@ xData = np.linspace(1, numDays, numDays, dtype=int)
 
 y= us_df['cases']
 
+deaths = us_df['deaths']
+
 p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
 
 try:
@@ -60,6 +62,8 @@ except RuntimeError as err:
 plt.yscale("log")
 
 plt.plot(xData, y, 'ko', label="Original Case Data")	
+
+plt.plot(xData, deaths, 'k1', label="Original Death Data")
 
 plt.savefig(rootSavePath+'US.png')
 	
@@ -86,6 +90,7 @@ for state in uniqueStates:
 	xData = np.linspace(1, numDays, numDays, dtype=int) 
 
 	y= state_df['cases']
+	deaths = state_df['deaths']
 
 	p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
 
