@@ -112,7 +112,8 @@ for state in uniqueStates:
 	
 	plt.yscale("log")
 
-	plt.plot(xData, y, 'ko', label="Original Case Data")	
+	plt.plot(xData, y, 'ko', label="Original Case Data")
+	plt.plot(xData, deaths, 'k1', label="Original Death Data")	
 
 	plt.savefig(stateRootSavePath+state+'.png')
 	
