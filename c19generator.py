@@ -133,6 +133,7 @@ for state in uniqueStates:
         	   xData = np.linspace(1, numDays, numDays, dtype=int)
 
         	   y= county_df['cases']
+	           deaths = county_df['deaths']
 
         	   p0 = [max(y), np.median(xData),1,min(y)] # this is an mandatory initial guess
 
@@ -156,7 +157,7 @@ for state in uniqueStates:
         	   plt.yscale("log")
 
         	   plt.plot(xData, y, 'ko', label="Original Case Data")
-
+        	   plt.plot(xData, deaths, 'k1', label="Original Death Data")
         	   plt.savefig(stateRootSavePath+state+'_'+county+'_county.png')
 
         	   #2020.04.26, chance.yohman@gmail.com, Fix the 20 plots warning
